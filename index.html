@@ -1,0 +1,577 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Beta Tester Registration — SCOUT Discovery Suite</title>
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+    body {
+      font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+      background: #f0f4f8;
+      min-height: 100vh;
+      display: flex;
+      align-items: flex-start;
+      justify-content: center;
+      padding: 40px 16px 60px;
+    }
+
+    .card {
+      background: #fff;
+      border-radius: 12px;
+      box-shadow: 0 4px 24px rgba(0,0,0,0.08);
+      width: 100%;
+      max-width: 620px;
+      overflow: hidden;
+    }
+
+    /* Header */
+    .header-logo-bar {
+      background: #ffffff;
+      padding: 28px 40px 22px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      border-bottom: 1px solid #e2eaf4;
+    }
+    .header-info {
+      background: linear-gradient(135deg, #1a2e4a 0%, #0d4f8c 100%);
+      padding: 20px 40px 24px;
+      text-align: center;
+    }
+    .header-eyebrow {
+      font-size: 11px;
+      font-weight: 600;
+      letter-spacing: 1.4px;
+      text-transform: uppercase;
+      color: #7eb8f0;
+      margin-bottom: 6px;
+    }
+    .header-info p {
+      font-size: 14px;
+      color: #b8d4f0;
+      line-height: 1.5;
+    }
+
+    /* Form body */
+    .form-body {
+      padding: 36px 40px 40px;
+    }
+
+    .section-label {
+      font-size: 11px;
+      font-weight: 700;
+      letter-spacing: 1px;
+      text-transform: uppercase;
+      color: #0d4f8c;
+      margin-bottom: 18px;
+      padding-bottom: 8px;
+      border-bottom: 2px solid #e8f0fa;
+    }
+
+    .field-group {
+      margin-bottom: 20px;
+    }
+
+    label {
+      display: block;
+      font-size: 13px;
+      font-weight: 600;
+      color: #2d3748;
+      margin-bottom: 6px;
+    }
+    label .req {
+      color: #e53e3e;
+      margin-left: 2px;
+    }
+
+    input[type="text"],
+    input[type="email"] {
+      width: 100%;
+      padding: 10px 14px;
+      border: 1.5px solid #d1dce8;
+      border-radius: 7px;
+      font-size: 14px;
+      color: #1a202c;
+      background: #fafcff;
+      transition: border-color 0.15s, box-shadow 0.15s;
+      outline: none;
+    }
+    input[type="text"]:focus,
+    input[type="email"]:focus {
+      border-color: #0d4f8c;
+      box-shadow: 0 0 0 3px rgba(13,79,140,0.12);
+      background: #fff;
+    }
+
+    .row-2 {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 16px;
+    }
+
+    /* Tester count toggle */
+    .tester-toggle {
+      display: flex;
+      gap: 12px;
+      margin-bottom: 0;
+    }
+    .toggle-option {
+      flex: 1;
+      position: relative;
+    }
+    .toggle-option input[type="radio"] {
+      position: absolute;
+      opacity: 0;
+      width: 0;
+      height: 0;
+    }
+    .toggle-option label {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 8px;
+      padding: 11px 16px;
+      border: 1.5px solid #d1dce8;
+      border-radius: 8px;
+      cursor: pointer;
+      font-size: 14px;
+      font-weight: 500;
+      color: #4a5568;
+      background: #fafcff;
+      transition: all 0.15s;
+      user-select: none;
+    }
+    .toggle-option input[type="radio"]:checked + label {
+      border-color: #0d4f8c;
+      background: #eef5ff;
+      color: #0d4f8c;
+      font-weight: 600;
+    }
+    .toggle-option label:hover {
+      border-color: #4d8ec8;
+    }
+
+    /* Additional testers section */
+    #additional-section {
+      display: none;
+      margin-top: 28px;
+    }
+
+    .tester-entry {
+      background: #f7faff;
+      border: 1.5px solid #dce8f5;
+      border-radius: 9px;
+      padding: 18px 18px 14px;
+      margin-bottom: 14px;
+      position: relative;
+    }
+    .tester-entry-header {
+      font-size: 12px;
+      font-weight: 700;
+      color: #0d4f8c;
+      text-transform: uppercase;
+      letter-spacing: 0.8px;
+      margin-bottom: 14px;
+    }
+    .remove-btn {
+      position: absolute;
+      top: 14px;
+      right: 14px;
+      background: none;
+      border: none;
+      cursor: pointer;
+      color: #a0aec0;
+      font-size: 18px;
+      line-height: 1;
+      padding: 0 2px;
+      transition: color 0.15s;
+    }
+    .remove-btn:hover { color: #e53e3e; }
+
+    .add-tester-btn {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      background: none;
+      border: 1.5px dashed #4d8ec8;
+      color: #0d4f8c;
+      font-size: 14px;
+      font-weight: 600;
+      padding: 10px 18px;
+      border-radius: 8px;
+      cursor: pointer;
+      width: 100%;
+      justify-content: center;
+      transition: background 0.15s;
+      margin-top: 4px;
+    }
+    .add-tester-btn:hover { background: #eef5ff; }
+
+    /* Divider */
+    .divider {
+      border: none;
+      border-top: 1.5px solid #e8f0fa;
+      margin: 28px 0;
+    }
+
+    /* Radio group (vertical list) */
+    .radio-group {
+      display: flex;
+      flex-direction: column;
+      gap: 8px;
+      margin-top: 8px;
+    }
+    .radio-option {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      padding: 9px 14px;
+      border: 1.5px solid #d1dce8;
+      border-radius: 7px;
+      cursor: pointer;
+      font-size: 14px;
+      font-weight: 500;
+      color: #2d3748;
+      background: #fafcff;
+      transition: border-color 0.15s, background 0.15s;
+    }
+    .radio-option:hover { border-color: #4d8ec8; background: #f0f7ff; }
+    .radio-option input[type="radio"] {
+      accent-color: #0d4f8c;
+      width: 16px;
+      height: 16px;
+      flex-shrink: 0;
+    }
+    .radio-option:has(input:checked) {
+      border-color: #0d4f8c;
+      background: #eef5ff;
+      color: #0d4f8c;
+      font-weight: 600;
+    }
+
+    /* Checkbox acknowledgment */
+    .checkbox-label {
+      display: flex;
+      align-items: flex-start;
+      gap: 12px;
+      padding: 14px 16px;
+      border: 1.5px solid #d1dce8;
+      border-radius: 8px;
+      cursor: pointer;
+      background: #fafcff;
+      font-size: 14px;
+      color: #2d3748;
+      line-height: 1.5;
+      font-weight: 400;
+      transition: border-color 0.15s, background 0.15s;
+      margin-bottom: 12px;
+    }
+    .checkbox-label:hover { border-color: #4d8ec8; background: #f0f7ff; }
+    .checkbox-label input[type="checkbox"] {
+      accent-color: #0d4f8c;
+      width: 17px;
+      height: 17px;
+      flex-shrink: 0;
+      margin-top: 2px;
+    }
+    .checkbox-label:has(input:checked) {
+      border-color: #0d4f8c;
+      background: #eef5ff;
+    }
+
+    /* Submit */
+    .submit-btn {
+      width: 100%;
+      padding: 14px;
+      background: linear-gradient(135deg, #0d4f8c, #1a7bc4);
+      color: #fff;
+      font-size: 15px;
+      font-weight: 700;
+      border: none;
+      border-radius: 8px;
+      cursor: pointer;
+      letter-spacing: 0.3px;
+      transition: opacity 0.15s, transform 0.1s;
+      margin-top: 8px;
+    }
+    .submit-btn:hover { opacity: 0.92; }
+    .submit-btn:active { transform: scale(0.99); }
+
+    .footer-note {
+      text-align: center;
+      font-size: 12px;
+      color: #718096;
+      margin-top: 16px;
+      line-height: 1.6;
+    }
+    .footer-note a { color: #0d4f8c; text-decoration: none; }
+
+    @media (max-width: 480px) {
+      .form-body { padding: 28px 24px 32px; }
+      .header { padding: 28px 24px 24px; }
+      .row-2 { grid-template-columns: 1fr; }
+      .tester-toggle { flex-direction: column; }
+    }
+  </style>
+</head>
+<body>
+
+<div class="card">
+  <!-- Logo on white background -->
+  <div class="header-logo-bar">
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 590 198" width="380" height="127" aria-label="SCOUT Discovery Suite">
+      <!-- Magnifying glass handle — bottom-left -->
+      <line x1="50" y1="113" x2="18" y2="148" stroke="#1a2e5a" stroke-width="16" stroke-linecap="round"/>
+      <!-- Magnifying glass circle -->
+      <circle cx="86" cy="74" r="53" fill="none" stroke="#1a2e5a" stroke-width="13"/>
+      <!-- Document page (white fill, dark navy border, folded top-right corner) -->
+      <path d="M64,45 L90,45 L102,57 L102,96 L64,96 Z" fill="white" stroke="#1a2e5a" stroke-width="5.5" stroke-linejoin="round"/>
+      <!-- Folded corner crease -->
+      <polyline points="90,45 90,57 102,57" fill="none" stroke="#1a2e5a" stroke-width="5.5" stroke-linejoin="round"/>
+      <!-- Teal checkmark -->
+      <polyline points="71,73 81,84 99,63" fill="none" stroke="#2ac4c4" stroke-width="6.5" stroke-linecap="round" stroke-linejoin="round"/>
+      <!-- "Scout" -->
+      <text x="156" y="101" font-family="Arial Black, Arial, sans-serif" font-weight="900" font-size="85" fill="#1a2e5a" letter-spacing="-2">Scout</text>
+      <!-- "DISCOVERY SUITE" -->
+      <text x="160" y="131" font-family="Arial, sans-serif" font-weight="700" font-size="21" fill="#2ac4c4" letter-spacing="5">DISCOVERY SUITE</text>
+      <!-- Tagline -->
+      <text x="228" y="172" text-anchor="middle" font-family="Arial, sans-serif" font-weight="700" font-size="16" fill="#1a2e5a" letter-spacing="1.5">FIND IT. FILE IT. PRODUCE IT.</text>
+    </svg>
+  </div>
+
+  <!-- Registration info banner -->
+  <div class="header-info">
+    <div class="header-eyebrow">RamFam Tech Solutions</div>
+    <p>Beta Tester Registration — Complete the form below to secure your firm's access to the early beta program.</p>
+  </div>
+
+  <div class="form-body">
+    <!--
+      FORMSPREE SETUP:
+      1. Go to https://formspree.io and create a free account.
+      2. Create a new form — you'll receive an endpoint like https://formspree.io/f/xxxxxxxx
+      3. Replace YOUR_FORMSPREE_ID below with that ID.
+    -->
+    <form id="registration-form" action="https://formspree.io/f/xgobwwvj" method="POST">
+
+      <!-- Firm Information -->
+      <div class="section-label">Firm Information</div>
+
+      <div class="field-group">
+        <label for="firm_name">Firm Name <span class="req">*</span></label>
+        <input type="text" id="firm_name" name="firm_name" placeholder="e.g. Ramage Law Firm" required />
+      </div>
+
+      <hr class="divider" />
+
+      <!-- Admin / Owner -->
+      <div class="section-label">Admin / Account Owner</div>
+
+      <div class="row-2">
+        <div class="field-group">
+          <label for="admin_name">Full Name <span class="req">*</span></label>
+          <input type="text" id="admin_name" name="admin_name" placeholder="First Last" required />
+        </div>
+        <div class="field-group">
+          <label for="admin_email">Email Address <span class="req">*</span></label>
+          <input type="email" id="admin_email" name="admin_email" placeholder="you@firm.com" required />
+        </div>
+      </div>
+
+      <hr class="divider" />
+
+      <!-- Tester Count -->
+      <div class="section-label">Beta Tester Count</div>
+
+      <div class="field-group">
+        <label>How many people from your firm will be beta testing? <span class="req">*</span></label>
+        <div class="tester-toggle" style="margin-top:8px;">
+          <div class="toggle-option">
+            <input type="radio" id="count_solo" name="tester_count" value="Just me" required />
+            <label for="count_solo">
+              <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="8" r="4"/><path d="M4 20c0-4 3.6-7 8-7s8 3 8 7"/></svg>
+              Just me
+            </label>
+          </div>
+          <div class="toggle-option">
+            <input type="radio" id="count_multiple" name="tester_count" value="Multiple testers" />
+            <label for="count_multiple">
+              <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><circle cx="9" cy="7" r="3.5"/><path d="M2 20c0-3.5 3.1-6 7-6"/><circle cx="16" cy="7" r="3.5"/><path d="M22 20c0-3.5-3.1-6-7-6s-7 2.5-7 6"/></svg>
+              Multiple testers
+            </label>
+          </div>
+        </div>
+      </div>
+
+      <!-- Additional Testers -->
+      <div id="additional-section">
+        <hr class="divider" style="margin-top:8px;" />
+        <div class="section-label">Additional Testers</div>
+        <div id="testers-list"></div>
+        <button type="button" class="add-tester-btn" onclick="addTester()">
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/></svg>
+          Add Another Tester
+        </button>
+      </div>
+
+      <hr class="divider" />
+
+      <!-- Qualifying Questions -->
+      <div class="section-label">Beta Testing Fit</div>
+
+      <div class="field-group">
+        <label>How many documents/files does your firm typically handle in a single discovery matter? <span class="req">*</span></label>
+        <div class="radio-group">
+          <label class="radio-option"><input type="radio" name="doc_volume" value="Fewer than 50" required /><span>Fewer than 50</span></label>
+          <label class="radio-option"><input type="radio" name="doc_volume" value="50–500" /><span>50–500</span></label>
+          <label class="radio-option"><input type="radio" name="doc_volume" value="500–5,000" /><span>500–5,000</span></label>
+          <label class="radio-option"><input type="radio" name="doc_volume" value="5,000–50,000" /><span>5,000–50,000</span></label>
+          <label class="radio-option"><input type="radio" name="doc_volume" value="50,000+" /><span>50,000+</span></label>
+        </div>
+      </div>
+
+      <div class="field-group">
+        <label>How frequently does your firm handle discovery matters? <span class="req">*</span></label>
+        <div class="radio-group">
+          <label class="radio-option"><input type="radio" name="discovery_frequency" value="Daily" required /><span>Daily</span></label>
+          <label class="radio-option"><input type="radio" name="discovery_frequency" value="Weekly" /><span>Weekly</span></label>
+          <label class="radio-option"><input type="radio" name="discovery_frequency" value="Monthly" /><span>Monthly</span></label>
+          <label class="radio-option"><input type="radio" name="discovery_frequency" value="Rarely / As needed" /><span>Rarely / As needed</span></label>
+        </div>
+      </div>
+
+      <div class="field-group">
+        <label for="current_tools">What software or tools does your firm currently use for discovery? <span class="req">*</span></label>
+        <input type="text" id="current_tools" name="current_tools" placeholder="e.g. Relativity, Clio, manual review, paper files…" required />
+      </div>
+
+      <div class="field-group">
+        <label>How comfortable is your firm with adopting new software? <span class="req">*</span></label>
+        <div class="radio-group">
+          <label class="radio-option"><input type="radio" name="tech_comfort" value="Very comfortable — we adopt new tools regularly" required /><span>Very comfortable — we adopt new tools regularly</span></label>
+          <label class="radio-option"><input type="radio" name="tech_comfort" value="Somewhat comfortable — open to it with support" /><span>Somewhat comfortable — open to it with support</span></label>
+          <label class="radio-option"><input type="radio" name="tech_comfort" value="Not very comfortable — we prefer familiar tools" /><span>Not very comfortable — we prefer familiar tools</span></label>
+        </div>
+      </div>
+
+      <div class="field-group">
+        <label>Are you willing to provide structured feedback during and after the beta period? <span class="req">*</span></label>
+        <div class="tester-toggle" style="margin-top:8px;">
+          <div class="toggle-option">
+            <input type="radio" id="feedback_yes" name="provide_feedback" value="Yes" required />
+            <label for="feedback_yes">Yes, absolutely</label>
+          </div>
+          <div class="toggle-option">
+            <input type="radio" id="feedback_no" name="provide_feedback" value="No" />
+            <label for="feedback_no">No</label>
+          </div>
+        </div>
+      </div>
+
+      <div class="field-group">
+        <label>Would you be willing to join occasional calls or surveys about your experience? <span class="req">*</span></label>
+        <div class="tester-toggle" style="margin-top:8px;">
+          <div class="toggle-option">
+            <input type="radio" id="calls_yes" name="feedback_calls" value="Yes" required />
+            <label for="calls_yes">Yes</label>
+          </div>
+          <div class="toggle-option">
+            <input type="radio" id="calls_no" name="feedback_calls" value="No" />
+            <label for="calls_no">No</label>
+          </div>
+        </div>
+      </div>
+
+      <hr class="divider" />
+
+      <!-- Acknowledgments -->
+      <div class="section-label">Acknowledgments</div>
+
+      <div class="field-group">
+        <label class="checkbox-label">
+          <input type="checkbox" name="ack_no_guarantee" required />
+          <span>I understand that submitting this form <strong>does not guarantee</strong> a beta testing spot. Selection is at the sole discretion of RamFam Tech Solutions.</span>
+        </label>
+        <label class="checkbox-label" style="margin-bottom:0;">
+          <input type="checkbox" name="ack_nominal_fee" required />
+          <span>I understand that a <strong>nominal fee</strong> will be charged prior to the start of the beta testing period.</span>
+        </label>
+      </div>
+
+      <hr class="divider" />
+
+      <button type="submit" class="submit-btn">Submit Registration</button>
+
+      <p class="footer-note">
+        Questions? Contact us at <a href="mailto:support@scoutdiscoverysuite.com">support@scoutdiscoverysuite.com</a><br />
+        Your information is used solely for the SCOUT beta program.
+      </p>
+
+    </form>
+  </div>
+</div>
+
+<script>
+  let testerCount = 0;
+
+  // Show/hide additional testers section
+  document.querySelectorAll('input[name="tester_count"]').forEach(radio => {
+    radio.addEventListener('change', function () {
+      const section = document.getElementById('additional-section');
+      if (this.value === 'Multiple testers') {
+        section.style.display = 'block';
+        if (testerCount === 0) addTester(); // start with one entry
+      } else {
+        section.style.display = 'none';
+        // Clear all entries and reset count
+        document.getElementById('testers-list').innerHTML = '';
+        testerCount = 0;
+      }
+    });
+  });
+
+  function addTester() {
+    testerCount++;
+    const idx = testerCount;
+    const list = document.getElementById('testers-list');
+
+    const entry = document.createElement('div');
+    entry.className = 'tester-entry';
+    entry.id = `tester-entry-${idx}`;
+    entry.innerHTML = `
+      <div class="tester-entry-header">Tester ${idx}</div>
+      <button type="button" class="remove-btn" onclick="removeTester(${idx})" title="Remove tester" aria-label="Remove tester ${idx}">&#x2715;</button>
+      <div class="row-2">
+        <div class="field-group" style="margin-bottom:0;">
+          <label for="tester_name_${idx}">Full Name <span class="req">*</span></label>
+          <input type="text" id="tester_name_${idx}" name="tester_${idx}_name" placeholder="First Last" required />
+        </div>
+        <div class="field-group" style="margin-bottom:0;">
+          <label for="tester_email_${idx}">Email Address <span class="req">*</span></label>
+          <input type="email" id="tester_email_${idx}" name="tester_${idx}_email" placeholder="colleague@firm.com" required />
+        </div>
+      </div>
+    `;
+    list.appendChild(entry);
+    renumberTesters();
+  }
+
+  function removeTester(idx) {
+    const entry = document.getElementById(`tester-entry-${idx}`);
+    if (entry) entry.remove();
+    renumberTesters();
+  }
+
+  function renumberTesters() {
+    const entries = document.querySelectorAll('.tester-entry');
+    entries.forEach((entry, i) => {
+      const header = entry.querySelector('.tester-entry-header');
+      if (header) header.textContent = `Tester ${i + 1}`;
+    });
+  }
+</script>
+
+</body>
+</html>
